@@ -1,0 +1,93 @@
+Applications for Final Project
+
+1. 
+Display travel agencies and info, order them by name
+
+SELECT agency_name, travel_agency_info FROM travel_agency
+ORDER BY agency_name ASC;
+
+2. 
+Search a customer by last name to display their basic information
+
+Select firstName, lastName, street, city, state, zipcode 
+FROM customer c JOIN address_of_customer a
+ON c.customer_id = a.customer_id
+WHERE lastName LIKE ('%Smith%');
+
+3.
+Display the destination and available date for all bookings that are available
+
+SELECT booking_id, booking_destination, booking_date, status_info
+FROM bookings b JOIN booking_status s
+ON b.status_id = s.booking_status_id
+WHERE s.booking_status_id LIKE ('%2%');
+
+4.
+Display all bookings currently reserved and by which customer
+
+SELECT booking_destination, firstName, lastName
+FROM bookings b 
+JOIN customer c 
+ON b.customer_id = c.customer_id
+JOIN booking_status s
+ON b.status_id = s.booking_status_id
+WHERE s.booking_status_id LIKE ('%1');
+
+5.
+Search Travel Agency by name to see what booking locations they provide and their status
+
+SELECT booking_destination, status_info
+FROM bookings b 
+JOIN booking_status s
+ON b.status_id = s.booking_status_id
+JOIN travel_agency a 
+ON b.travel_agency_id = a.travel_agency_id
+WHERE agency_name LIKE ('%Safari Travel%');
+
+6.
+Search for a booking service to see what travel agency and available bookings and their dates are available
+
+SELECT agency_name, booking_destination, booking_date, status_info
+FROM bookings b 
+JOIN booking_status stat
+ON b.status_id = stat.booking_status_id
+JOIN travel_agency a
+ON b.travel_agency_id = a.travel_agency_id
+JOIN booking_services book_s
+ON b.booking_id = book_s.booking_id
+JOIN services s
+ON s.services_id = book_s.services_id
+WHERE  service_type LIKE('%Hotels%')
+AND status_info LIKE ('%Available%');
+
+7.
+View the total number of bookings results that were cancelled and successful.
+
+SELECT result_info, COUNT(*)
+FROM booking_result r
+JOIN bookings b
+ON r.booking_result_id = b.result_id
+GROUP BY result_info;
+
+8.
+Display all cancelled bookings, this includes their booking id, destination, booking date. 
+This is sorted in ascending order by booking date.
+
+SELECT booking_id, booking_destination, booking_date
+FROM bookings b
+JOIN booking_result r
+ON b.result_id = r.booking_result_id
+WHERE result_info LIKE '%Cancelled%'
+ORDER BY booking_date ASC;
+
+9.
+Search a booking destination to view its agency, booking date, and whether it is available or booked
+
+SELECT booking_destination, agency_name, booking_date, status_info
+FROM bookings b
+JOIN travel_agency a
+ON b.travel_agency_id = a.travel_agency_id 
+JOIN booking_status s
+ON b.status_id = s.booking_status_id
+WHERE booking_destination LIKE ('%San Francisco%');
+
